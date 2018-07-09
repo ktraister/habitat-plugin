@@ -35,7 +35,7 @@
 
     <name>Habitat Executor</name>
     <description>Executes Habitat</description>
-    <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
+    <url>https://wiki.jenkins.io/display/JENKINS/Habitat+Plugin</url>
     <licenses>
         <license>
             <name>MIT License</name>
