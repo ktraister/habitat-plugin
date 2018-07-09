@@ -29,6 +29,7 @@
 
 
     <artifactId>habitat</artifactId>
+    <groupId>com.indellient</groupId>
     <version>0.1.0</version>
     <packaging>hpi</packaging>
 
