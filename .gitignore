@@ -56,3 +56,4 @@ results/
 target/
 work/
 .DS_Store
+release.properties
