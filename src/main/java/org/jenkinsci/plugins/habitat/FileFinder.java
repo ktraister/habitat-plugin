@@ -7,13 +7,16 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class FileFinder extends MasterToSlaveCallable<String,RuntimeException> {
+public class FileFinder extends MasterToSlaveCallable<String, RuntimeException> {
     private String start;
     private String file;
 
     public FileFinder(String start, String file) {
+        this.start = start;
+        this.file = file;
 
     }
+
     @Override
     public String call() throws RuntimeException {
         Collection files = FileUtils.listFiles(new File(this.start), null, true);

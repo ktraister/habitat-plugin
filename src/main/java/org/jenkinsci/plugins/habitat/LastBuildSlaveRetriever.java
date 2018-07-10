@@ -2,12 +2,11 @@ package org.jenkinsci.plugins.habitat;
 
 import jenkins.security.MasterToSlaveCallable;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class LastBuildSlaveRetriever extends MasterToSlaveCallable<LastBuild,RuntimeException> {
+public class LastBuildSlaveRetriever extends MasterToSlaveCallable<LastBuild, RuntimeException> {
 
     private String path;
 
@@ -34,7 +33,11 @@ public class LastBuildSlaveRetriever extends MasterToSlaveCallable<LastBuild,Run
         }
 
         File f = new File(file);
-        FileReader fileReader = new FileReader(f);
+
+        InputStream inputStream = new FileInputStream(f);
+        Reader fileReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         StringBuffer stringBuffer = new StringBuffer();
         String line;
@@ -79,6 +82,7 @@ public class LastBuildSlaveRetriever extends MasterToSlaveCallable<LastBuild,Run
             stringBuffer.append("\n");
         }
         fileReader.close();
+        bufferedReader.close();
         System.out.println("Contents of file:");
         System.out.println(stringBuffer.toString());
 

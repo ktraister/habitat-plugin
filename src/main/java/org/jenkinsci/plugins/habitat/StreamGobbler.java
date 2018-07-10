@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.habitat;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
 class StreamGobbler implements Runnable {
@@ -16,7 +17,7 @@ class StreamGobbler implements Runnable {
 
     @Override
     public void run() {
-        new BufferedReader(new InputStreamReader(inputStream)).lines()
+        new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines()
                 .forEach(consumer);
     }
 }

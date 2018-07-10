@@ -238,6 +238,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         Map<String, String> otherEnvs = build.getEnvironment(TaskListener.NULL);
 
         Proc proc = null;
+        int exitCode = -1;
         try {
             Map<String, String> env = this.getEnv(log);
             env.putAll(otherEnvs);
@@ -248,10 +249,10 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             Launcher.ProcStarter starter = launcher.launch().pwd(workspace).envs(env).cmdAsSingleString(this.command(log));
             starter.stdout(log);
             proc = launcher.launch(starter);
+            exitCode = proc.join();
         } catch (Exception e) {
             log.println(e.getMessage());
         }
-        int exitCode = proc.join();
         if (exitCode != 0) {
             throw new IOException("Failed to execute " + this.getTask());
         }
