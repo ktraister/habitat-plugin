@@ -181,9 +181,12 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     private String getLatestPackage(PrintStream log) throws Exception {
         LastBuild lastBuild = this.slave.call(new LastBuildSlaveRetriever(this.lastBuildPath(log)));
         String artifact = lastBuild.getArtifact();
-        log.println("Artifact " + artifact + " found in: " + new File(this.getDirectory()).getAbsolutePath());
-        return new File(this.getDirectory()).getAbsolutePath() + File.separator + artifact;
-//        return this.slave.call(new FileFinder(new File(this.getDirectory()).getAbsolutePath(), artifact));
+        log.println("Artifact " + artifact + " found in: " + this.getAbsolutePath(this.getDirectory()));
+        return this.slave.call(new FileConstructor(Arrays.asList(this.getAbsolutePath(this.getDirectory()), artifact)));
+    }
+
+    private String getAbsolutePath(String file) throws IOException, InterruptedException {
+        return this.slave.call(new FilePathFinder(file));
     }
 
     private String lastBuildPath(PrintStream log) throws Exception {
@@ -196,7 +199,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             }
             return this.getLastBuildFile();
         } else {
-            return this.slave.call(new FileFinder(new File(this.getDirectory()).getAbsolutePath(), "last_build.env"));
+            return this.slave.call(new FileFinder(this.getAbsolutePath(this.getDirectory()), "last_build.env"));
         }
     }
 
