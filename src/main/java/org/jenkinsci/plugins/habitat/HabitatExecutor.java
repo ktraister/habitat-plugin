@@ -30,7 +30,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     private String origin;
     private String bldrUrl;
     private String authToken;
-    private String format
+    private String format; 
 
     private VirtualChannel slave;
 
