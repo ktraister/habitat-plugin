@@ -165,8 +165,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
 	List<String> possibleFormats = Arrays.asList("aci", "cf", "docker", "kubernetes", "mesos", "tar");
 	String myformat = this.getFormat();
 	if (!possibleFormats.contains(myformat)) {
-	    throw new Exception("Format entered is not valid! \n Valid formats: \n -------------------- %s", 
-			         Arrays.toString(possibleFormats));
+	    throw new Exception("Format entered is not valid! \n Valid formats: aci, cf, docker, kubernetes, mesos, tar"); 
         }
 	
 	String lastPackage = this.getLatestPackage(log);
@@ -174,7 +173,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             throw new Exception("Could not find hart file " + lastPackage);
         }
 
-        log.println("Exporting %s to %s", lastPackage, myformat);
+        log.println("Exporting " + lastPackage + " to " + myformat);
 
         if (isWindows) {
             return String.format("hab pkg export %s %s", myformat, lastPackage);
