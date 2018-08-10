@@ -37,9 +37,8 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
 
     @DataBoundConstructor
     public HabitatExecutor(
-            String task, String directory, String artifact, String channel,
-            String origin, String bldrUrl, String authToken, String lastBuildFile,
-	    String format
+            String task, String directory, String artifact, String channel, String origin, 
+	    String bldrUrl, String authToken, String lastBuildFile, String format
     ) {
         this.setTask(task);
         this.setArtifact(artifact);
