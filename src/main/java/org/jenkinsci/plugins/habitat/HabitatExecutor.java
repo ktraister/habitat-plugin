@@ -105,7 +105,6 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.channel = channel;
     }
 
-    //more keith
     public String getFormat() {
 	return format; 
     }
@@ -114,7 +113,6 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     public void setFormat(String format) { 
         this.format = format;
     }
-    //end of keith
 
     public String getTask() {
         return task;
@@ -146,7 +144,6 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
                 return this.promoteCommand(isWindows, log);
             case "upload":
                 return this.uploadCommand(isWindows, log);
-	    //also keith
 	    case "export":
                 return this.exportCommand(isWindows, log);
             default:
@@ -162,11 +159,9 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         }
     }
 
-    //keith starts here
     private String exportCommand(boolean isWindows, PrintStream log) throws Exception {
 
         //declaring my list of acceptable values for format
-	//aci, cf, docker, kubernetes, mesos, or tar
 	List<String> possibleFormats = Arrays.asList("aci", "cf", "docker", "kubernetes", "mesos", "tar");
 	String myformat = this.getFormat();
 	if (!possibleFormats.contains(myformat)) {
@@ -179,7 +174,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             throw new Exception("Could not find hart file " + lastPackage);
         }
 
-        log.println("Exporting %s to Docker Container", lastPackage);
+        log.println("Exporting %s to %s", lastPackage, myformat);
 
         if (isWindows) {
             return String.format("hab pkg export %s %s", myformat, lastPackage);
@@ -187,7 +182,6 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             return String.format("hab pkg export %s %s", myformat, lastPackage);
         }
     }
-    //keith ends here
 
 
     private String promoteCommand(boolean isWindows, PrintStream log) throws Exception {
