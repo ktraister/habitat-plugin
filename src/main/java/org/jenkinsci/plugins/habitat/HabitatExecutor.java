@@ -30,14 +30,15 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     private String origin;
     private String bldrUrl;
     private String authToken;
+    private String format; 
 
     private VirtualChannel slave;
 
 
     @DataBoundConstructor
     public HabitatExecutor(
-            String task, String directory, String artifact, String channel,
-            String origin, String bldrUrl, String authToken, String lastBuildFile
+            String task, String directory, String artifact, String channel, String origin, 
+	    String bldrUrl, String authToken, String lastBuildFile, String format
     ) {
         this.setTask(task);
         this.setArtifact(artifact);
@@ -47,6 +48,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.setBldrUrl(bldrUrl);
         this.setAuthToken(authToken);
         this.setLastBuildFile(lastBuildFile);
+        this.setFormat(format);
     }
 
     public String getLastBuildFile() {
@@ -103,6 +105,15 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.channel = channel;
     }
 
+    public String getFormat() {
+	return format; 
+    }
+
+    @DataBoundSetter
+    public void setFormat(String format) { 
+        this.format = format;
+    }
+
     public String getTask() {
         return task;
     }
@@ -133,6 +144,8 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
                 return this.promoteCommand(isWindows, log);
             case "upload":
                 return this.uploadCommand(isWindows, log);
+	    case "export":
+                return this.exportCommand(isWindows, log);
             default:
                 throw new Exception("Task not yet implemented");
         }
@@ -145,6 +158,30 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             return String.format("hab studio build %s", this.getDirectory());
         }
     }
+
+    private String exportCommand(boolean isWindows, PrintStream log) throws Exception {
+
+        //declaring my list of acceptable values for format
+	List<String> possibleFormats = Arrays.asList("aci", "cf", "docker", "kubernetes", "mesos", "tar");
+	String myformat = this.getFormat();
+	if (!possibleFormats.contains(myformat)) {
+	    throw new Exception("Format entered is not valid! \n Valid formats: aci, cf, docker, kubernetes, mesos, tar"); 
+        }
+	
+	String lastPackage = this.getLatestPackage(log);
+        if (!this.slave.call(new FileExistence(lastPackage))) {
+            throw new Exception("Could not find hart file " + lastPackage);
+        }
+
+        log.println("Exporting " + lastPackage + " to " + myformat);
+
+        if (isWindows) {
+            return String.format("hab pkg export %s %s", myformat, lastPackage);
+        } else {
+            return String.format("hab pkg export %s %s", myformat, lastPackage);
+        }
+    }
+
 
     private String promoteCommand(boolean isWindows, PrintStream log) throws Exception {
         String pkgIdent = this.getArtifact();
