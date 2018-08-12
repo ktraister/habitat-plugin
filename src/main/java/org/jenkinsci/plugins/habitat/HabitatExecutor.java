@@ -33,6 +33,8 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     private String format; 
     private String searchString;
     private String command;
+    private String blpath;
+    private String blbinary;
 
     private VirtualChannel slave;
 
@@ -41,7 +43,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     public HabitatExecutor(
             String task, String directory, String artifact, String channel, String origin, 
 	    String bldrUrl, String authToken, String lastBuildFile, String format, 
-	    String searchString, String command
+	    String searchString, String command, String blbinary, String blpath
     ) {
         this.setTask(task);
         this.setArtifact(artifact);
@@ -54,6 +56,8 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.setFormat(format);
         this.setsearchString(searchString);
         this.setcommand(command);
+	this.setblpath(blpath);
+	this.setblbinary(blbinary);
     }
 
     public String getLastBuildFile() {
@@ -65,12 +69,30 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.lastBuildFile = lastBuildFile;
     }
 
+    public String getblpath() {
+        return blpath;
+    }
+
+    @DataBoundSetter
+    public void setblpath(String blpath) {
+        this.blpath = blpath;
+    }
+
+    public String getblbinary() {
+        return blbinary;
+    }
+
+    @DataBoundSetter
+    public void setblbinary(String blbinary) {
+        this.blbinary = blbinary;
+    }
+
     public String getcommand() {
         return command;
     }
 
     @DataBoundSetter
-    public void setcommand(String lastBuildFile) {
+    public void setcommand(String command) {
         this.command = command;
     }
 
@@ -178,11 +200,14 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             case "config":
                 return this.configCommand(isWindows, log);
             case "exec":
-                return this.execCommand(isWindows, log)
+                return this.execCommand(isWindows, log);
+            case "binlink":
+                return this.binlinkCommand(isWindows, log);
             default:
                 throw new Exception("Task not yet implemented");
         }
     }
+
 
     private String buildCommand(boolean isWindows) {
         if (isWindows) {
@@ -191,6 +216,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             return String.format("hab studio build %s", this.getDirectory());
         }
     }
+
 
     private String exportCommand(boolean isWindows, PrintStream log) throws Exception {
 
@@ -212,6 +238,38 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             return String.format("hab pkg export %s %s", myformat, lastPackage);
         } else {
             return String.format("hab pkg export %s %s", myformat, lastPackage);
+        }
+    }
+
+
+    private String binlinkCommand(boolean isWindows, PrintStream log) throws Exception {
+
+        String blpath = this.getblpath();
+        String blbinary = this.getblbinary();
+        String pkgIdent = this.getArtifact();
+
+        if (pkgIdent == null) {
+            LastBuild lastBuild = this.slave.call(new LastBuildSlaveRetriever(this.lastBuildPath(log)));
+            pkgIdent = lastBuild.getIdent();
+        }
+
+
+        if (blbinary == null) {
+            throw new Exception("You must provide a binary to binlink to");
+        }
+	
+        if (blpath == null) {
+            if (isWindows) {
+                return String.format("hab pkg binlink %s %s", pkgIdent, blbinary);
+            } else {
+                return String.format("hab pkg binlink %s %s", pkgIdent, blbinary);
+            }
+        } else {
+            if (isWindows) {
+                return String.format("hab pkg binlink -d %s %s %s", blpath, pkgIdent, blbinary);
+            } else {
+                return String.format("hab pkg binlink -d %s %s %s", blpath, pkgIdent, blbinary);
+            }
         }
     }
 

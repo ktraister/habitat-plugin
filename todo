@@ -1,6 +1,0 @@
-    binlink     Creates a binlink for a package binary in a common 'PATH' location
-    channels    Find out what channels a package belongs to
-    config      Displays the default configuration options for a service
-    demote      Demote a package from a specified channel
-    exec        Executes a command using the 'PATH' context of an installed package
-    search      Search for a package in Builder
