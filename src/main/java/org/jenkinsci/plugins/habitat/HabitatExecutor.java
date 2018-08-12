@@ -32,6 +32,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     private String authToken;
     private String format; 
     private String searchString;
+    private String command;
 
     private VirtualChannel slave;
 
@@ -40,7 +41,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     public HabitatExecutor(
             String task, String directory, String artifact, String channel, String origin, 
 	    String bldrUrl, String authToken, String lastBuildFile, String format, 
-	    String searchString
+	    String searchString, String command
     ) {
         this.setTask(task);
         this.setArtifact(artifact);
@@ -52,6 +53,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.setLastBuildFile(lastBuildFile);
         this.setFormat(format);
         this.setsearchString(searchString);
+        this.setcommand(command);
     }
 
     public String getLastBuildFile() {
@@ -61,6 +63,15 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     @DataBoundSetter
     public void setLastBuildFile(String lastBuildFile) {
         this.lastBuildFile = lastBuildFile;
+    }
+
+    public String getcommand() {
+        return command;
+    }
+
+    @DataBoundSetter
+    public void setcommand(String lastBuildFile) {
+        this.command = command;
     }
 
     public String getOrigin() {
@@ -166,6 +177,8 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
                 return this.searchCommand(isWindows, log);
             case "config":
                 return this.configCommand(isWindows, log);
+            case "exec":
+                return this.execCommand(isWindows, log)
             default:
                 throw new Exception("Task not yet implemented");
         }
@@ -265,6 +278,26 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             return String.format("hab pkg config %s", pkgIdent);
         } else {
             return String.format("hab pkg config %s", pkgIdent);
+        }
+    }
+
+
+    private String execCommand(boolean isWindows, PrintStream log) throws Exception {
+        String pkgIdent = this.getArtifact();
+        if (pkgIdent == null) {
+            LastBuild lastBuild = this.slave.call(new LastBuildSlaveRetriever(this.lastBuildPath(log)));
+            pkgIdent = lastBuild.getIdent();
+        }
+
+        String command = this.getcommand();
+        if (command == null) {
+            throw new Exception("Command cannot be null");
+        }
+
+        if (isWindows) {
+            return String.format("hab pkg exec %s %s", pkgIdent, command);
+        } else {
+            return String.format("hab pkg exec %s %s", pkgIdent, command);
         }
     }
 
