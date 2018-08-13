@@ -100,6 +100,7 @@ pipeline {
         HAB_NOCOLORING = true
         HAB_BLDR_URL = 'https://bldr.habitat.sh/'
         HAB_AUTH_TOKEN = 'my-hab-auth-token-name'
+        HAB_PKG = 'core/googlemock/1.8.0/20180609191841'
     }
 
     stages {
@@ -138,11 +139,10 @@ pipeline {
             }
         stage('channels') {
               //lists channels specified habitat pkg belongs to
-              habitat task: 'channels', authToken: "${env.HAB_AUTH_TOKEN}", artifact: "${env.PKG_NAME}", bldrUrl: "${env.HAB_BLDR_URL}"
+              habitat task: 'channels', authToken: "${env.HAB_AUTH_TOKEN}", artifact: "${env.HAB_PKG}", bldrUrl: "${env.HAB_BLDR_URL}"
             }
         stage('config') {
               //lists configuration options build into package
-              //must provide a hart file instead of full pkg origin/name/path
               habitat task: 'config', artifact: "${env.PKG_NAME}", authToken: "${env.HAB_AUTH_TOKEN}", bldrUrl: "${env.HAB_BLDR_URL}"
             }
         stage('export') {
