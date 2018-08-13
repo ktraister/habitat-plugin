@@ -34,7 +34,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     private String searchString;
     private String command;
     private String path;
-    private String binary;
+    private String blbinary;
 
     private VirtualChannel slave;
 
@@ -43,7 +43,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     public HabitatExecutor(
             String task, String directory, String artifact, String channel, String origin, 
 	    String bldrUrl, String authToken, String lastBuildFile, String format, 
-	    String searchString, String command, String binary, String path
+	    String searchString, String command, String blbinary, String path
     ) {
         this.setTask(task);
         this.setArtifact(artifact);
@@ -57,7 +57,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.setsearchString(searchString);
         this.setcommand(command);
 	this.setpath(path);
-	this.setbinary(binary);
+	this.setblbinary(blbinary);
     }
 
     public String getLastBuildFile() {
@@ -78,13 +78,13 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         this.path = path;
     }
 
-    public String getbinary() {
-        return binary;
+    public String getblbinary() {
+        return blbinary;
     }
 
     @DataBoundSetter
-    public void setbinary(String binary) {
-        this.binary = binary;
+    public void setblbinary(String blbinary) {
+        this.blbinary = blbinary;
     }
 
     public String getcommand() {
@@ -245,7 +245,7 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
     private String binlinkCommand(boolean isWindows, PrintStream log) throws Exception {
 
         String path = this.getpath();
-        String binary = this.getbinary();
+        String blbinary = this.getblbinary();
         String pkgIdent = this.getArtifact();
 
         if (pkgIdent == null) {
@@ -254,21 +254,21 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
         }
 
 
-        if (binary == null) {
+        if (blbinary == null) {
             throw new Exception("You must provide a binary to binlink to");
         }
 	
         if (path == null) {
             if (isWindows) {
-                return String.format("hab pkg binlink %s %s", pkgIdent, binary);
+                return String.format("hab pkg binlink %s %s", pkgIdent, blbinary);
             } else {
-                return String.format("hab pkg binlink %s %s", pkgIdent, binary);
+                return String.format("hab pkg binlink %s %s", pkgIdent, blbinary);
             }
         } else {
             if (isWindows) {
-                return String.format("hab pkg binlink -d %s %s %s", path, pkgIdent, binary);
+                return String.format("hab pkg binlink -d %s %s %s", path, pkgIdent, blbinary);
             } else {
-                return String.format("hab pkg binlink -d %s %s %s", path, pkgIdent, binary);
+                return String.format("hab pkg binlink -d %s %s %s", path, pkgIdent, blbinary);
             }
         }
     }
