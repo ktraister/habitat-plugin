@@ -148,7 +148,7 @@ pipeline {
         stage('export') {
               //export hart file to any format ("aci", "cf", "docker", "kubernetes", "mesos", "tar")
               //must provide a hart file instead of full pkg origin/name/path
-              habitat task: 'export', format: "docker", lastBuildFile: "${workspace}/results/last_build.env" 
+              habitat task: 'export', format: "docker", lastBuildFile: "${workspace}/results/last_build.env", bldrUrl: "${env.HAB_BLDR_URL}"
             }
         stage('search') {
               //search an origin for all packages matching search string
