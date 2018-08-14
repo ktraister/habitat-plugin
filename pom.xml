@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!--<dependencies>-->
-    <!--<dependency>-->
-    <!--<groupId>org.apache.maven.plugins</groupId>-->
-    <!--<artifactId>maven-enforcer-plugin</artifactId>-->
-    <!--<version>1.4.1</version>-->
-    <!--</dependency>-->
-    <!--</dependencies>-->
     <properties>
         <!--<revision>1.0-alpha-1</revision>-->
         <!--<changelist>-SNAPSHOT</changelist>-->
         <!--<jclouds.version>2.1.0</jclouds.version>-->
-        <jenkins.version>2.60.3</jenkins.version>
+        <jenkins.version>2.99</jenkins.version>
+        <!-- <jenkins.version>1.609.1</jenkins.version> -->
         <java.level>8</java.level>
         <!--<workflow-api-plugin.version>2.28-rc343.e9b9e0610374-->
         <!--</workflow-api-plugin.version> &lt;!&ndash; TODO https://github.com/jenkinsci/workflow-api-plugin/pull/67 &ndash;&gt;-->
@@ -29,7 +23,7 @@
 
     <artifactId>habitat</artifactId>
     <groupId>com.indellient</groupId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <name>Habitat Executor</name>
