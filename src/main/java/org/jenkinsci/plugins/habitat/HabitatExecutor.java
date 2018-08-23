@@ -468,6 +468,9 @@ public class HabitatExecutor extends Builder implements SimpleBuildStep {
             starter.stdout(log);
             proc = launcher.launch(starter);
             exitCode = proc.join();
+	    if (this.getTask().trim() == "search" && log.contains("No packages found that match")) {
+                exitCode = 1
+            }
         } catch (Exception e) {
             log.println(e.getMessage());
         }
